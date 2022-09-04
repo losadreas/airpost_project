@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Login</h1>
+<hr>
+<form action="{% url 'login'%}" method="post">
+    {{form}}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">submit</button>
+</form>
+<li><a href="{% url 'social:begin' 'github' %}">Login via GitHub</a></li>
+<li><a href="{% url 'social:begin' 'google-oauth2' %}">Login via Google</a></li>
+<a href="{%url 'password_reset'%}">Forgot password?</a>
+<hr>
+<a href="{%url 'register'%}">Register</a>
+{% endblock %}

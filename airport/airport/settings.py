@@ -31,7 +31,7 @@ DEBUG = True
 # EMAIL_HOST_PASSWORD = 'OZWB7ufDN2ha8vsk'
 # EMAIL_USE_SSL = True
 # EMAIL_USE_TLS = False
-# DEFAULT_FROM_EMAIL = 'losandreas-insta@ukr.net'
+DEFAULT_FROM_EMAIL = 'losandreas-insta@ukr.net'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ALLOWED_HOSTS = []

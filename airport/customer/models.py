@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
 class Customer(AbstractUser):
@@ -16,9 +17,8 @@ class Customer(AbstractUser):
 
 class Flight(models.Model):
     destination = models.CharField(max_length=150, blank=True)
-    date_time_flight = models.DateTimeField(_("date posted"), default=timezone.now)
-    tickets = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    date_time_flight = models.DateTimeField(default=timezone.now)
+    tickets = models.ForeignKey
 
 
 class Ticket(models.Model):
@@ -26,13 +26,14 @@ class Ticket(models.Model):
     passenger = models.ForeignKey(Customer)
     price = models.PositiveIntegerField
     check_in = models.BooleanField
-    gate
+    boarding = models.BooleanField
     luggage = models.PositiveIntegerField
     option = models.PositiveIntegerField
     seat_type = models.Choices
 
+
 class Passenger(models.Model):
-    first_name
-    last_name
-    sex
-    passport
+    first_name = models.CharField
+    last_name = models.CharField
+    sex = models.Choices
+    passport = models.CharField
