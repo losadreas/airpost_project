@@ -25,6 +25,15 @@ SECRET_KEY = 'django-insecure-)#4_praw64ek%bbq#%#&op9p0&hnzb@v7e5@=pe=kd$yzut=&2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# EMAIL_HOST = 'smtp.ukr.net'
+# EMAIL_PORT = '465'
+# EMAIL_HOST_USER = 'losandreas-insta@ukr.net'
+# EMAIL_HOST_PASSWORD = 'OZWB7ufDN2ha8vsk'
+# EMAIL_USE_SSL = True
+# EMAIL_USE_TLS = False
+# DEFAULT_FROM_EMAIL = 'losandreas-insta@ukr.net'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 ALLOWED_HOSTS = []
 
 
@@ -54,7 +63,7 @@ ROOT_URLCONF = 'airport.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

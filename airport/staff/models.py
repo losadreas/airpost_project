@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Personal(AbstractUser):
+class Staff(AbstractUser):
     ROLES_CHOICES = ('Gate manager', 'Check-in manager', 'Supervisor')
     email = models.EmailField(unique=True)
     role = models.Choices(ROLES_CHOICES)

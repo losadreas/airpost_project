@@ -16,12 +16,9 @@ class Customer(AbstractUser):
 
 class Flight(models.Model):
     destination = models.CharField(max_length=150, blank=True)
-    date_flight = models.DateTimeField(_("date posted"), default=timezone.now)
-    tags = models.CharField(_("tags"), max_length=150, blank=True)
-    passenger = models.ForeignKey(settings.AUTH_USER_MODEL,
+    date_time_flight = models.DateTimeField(_("date posted"), default=timezone.now)
+    tickets = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
-    likes = models.ManyToManyField(User, related_name='likes_post')
-    quantity_likes = models.PositiveIntegerField(default=0)
 
 
 class Ticket(models.Model):
@@ -29,6 +26,13 @@ class Ticket(models.Model):
     passenger = models.ForeignKey(Customer)
     price = models.PositiveIntegerField
     check_in = models.BooleanField
+    gate
     luggage = models.PositiveIntegerField
     option = models.PositiveIntegerField
     seat_type = models.Choices
+
+class Passenger(models.Model):
+    first_name
+    last_name
+    sex
+    passport
