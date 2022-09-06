@@ -14,7 +14,7 @@
       <ul class="nav nav-pills">
         <li class="nav-item"><a href="{% url 'home'%}" class="nav-link" aria-current="page">Home</a></li>
           {% if user.is_authenticated %}
-        <li class="nav-item"><a href="{% url 'user_view' user.id %}" class="nav-link">User profile</a></li>
+
         <li class="nav-item"><a href="{%url 'logout'%}" class="nav-link">Logout</a></li>
           {% endif %}
       </ul>

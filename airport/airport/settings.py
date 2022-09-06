@@ -36,6 +36,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'customer.Customer'
 
 # Application definition
 
@@ -46,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'customer',
+    'staff'
 ]
 
 MIDDLEWARE = [

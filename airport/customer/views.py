@@ -12,6 +12,12 @@ from django.core.mail import EmailMessage
 Customer = get_user_model()
 
 
+class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        template = "home.html"
+        return render(request, template)
+
+
 class ConfirmEmail(View):
     def get(self, request, *args, **kwargs):
         template = "confirm_email.html"
@@ -38,7 +44,7 @@ class SignUp(CreateView):
             customer.token = account_activation_token.make_token(customer)
             customer.is_active = False
             customer.save()
-            message = f'Verify email Follow the link {request._current_scheme_host}/users/verify_email/{user.token}/{str(urlsafe_base64_encode(force_bytes(customer.pk)))}/'
+            message = f'Verify email Follow the link {request._current_scheme_host}/customers/verify_email/{customer.token}/{str(urlsafe_base64_encode(force_bytes(customer.pk)))}/'
             email = EmailMessage('Verify email', message, from_email=DEFAULT_FROM_EMAIL, to=[customer.email])
             email.send()
             return redirect('confirm_email')
@@ -62,4 +68,4 @@ class VerifyEmail(View):
             login(request, customer, backend='django.contrib.auth.backends.ModelBackend')
         else:
             return redirect('check_link')
-        return redirect('addition_info')
+        return redirect('home')

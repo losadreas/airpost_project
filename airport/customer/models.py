@@ -4,10 +4,12 @@ from django.utils import timezone
 
 
 class Customer(AbstractUser):
+    ROLES_CHOICES = (('Gate manager', 'Gate manager'), ('Check-in manager', 'Check-in manager'),
+                     ('Supervisor', 'Supervisor'), ('Customer', 'Customer'))
     email = models.EmailField(unique=True)
-    ticket = models.CharField(max_length=500, blank=True)
     token = models.CharField(max_length=124, blank=True)
-    balance = models.PositiveIntegerField()
+    balance = models.PositiveIntegerField(default=0)
+    role = models.CharField(max_length=25, choices=ROLES_CHOICES)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -15,25 +17,29 @@ class Customer(AbstractUser):
         return self.username
 
 
+class Passenger(models.Model):
+    SEX_CHOICES = (('Male', 'Male'), ('Female', 'Female'))
+    first_name = models.CharField(max_length=48, blank=True)
+    last_name = models.CharField(max_length=48, blank=True)
+    sex = models.CharField(max_length=12, choices=SEX_CHOICES)
+    passport = models.CharField(max_length=16, blank=True)
+
+
 class Flight(models.Model):
     destination = models.CharField(max_length=150, blank=True)
     date_time_flight = models.DateTimeField(default=timezone.now)
-    tickets = models.ForeignKey
 
 
 class Ticket(models.Model):
-    flight = models.ForeignKey(Flight)
-    passenger = models.ForeignKey(Customer)
-    price = models.PositiveIntegerField
-    check_in = models.BooleanField
-    boarding = models.BooleanField
+    SEAT_CHOICES = (('economy', 'economy'), ('business', 'business'))
+    flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    price = models.FloatField
+    check_in = models.BooleanField(default=False)
+    boarding = models.BooleanField(default=False)
     luggage = models.PositiveIntegerField
     option = models.PositiveIntegerField
-    seat_type = models.Choices
+    seat_type = models.CharField(max_length=24, choices=SEAT_CHOICES)
 
 
-class Passenger(models.Model):
-    first_name = models.CharField
-    last_name = models.CharField
-    sex = models.Choices
-    passport = models.CharField
