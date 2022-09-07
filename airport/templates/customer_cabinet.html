@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% block content %}
+
+<ul>
+    <li>
+        <h2>{{customer.username}}</h2>
+    <li>Balance - {{customer.balance}}$</li>
+
+    {% for ticket in tickets %}
+    <hr>
+    <li>Ticket</li>
+    <li>{{ticket.price}}$</li>
+     <li>Boarding {{ticket.boarding}}</li>
+     <li>{{ticket.seat_type}}</li>
+    {% endfor %}
+
+</ul>
+{% endblock %}

@@ -2,8 +2,8 @@ from django.urls import path, include
 from customer.views import *
 
 urlpatterns = [
-  #  path('logout/', LogOut.as_view(), name='logout'),
-  #  path('<int:user_id>/', UserView.as_view(), name='user_view'),
+    path('logout/', LogOut.as_view(), name='logout'),
+    path('cabinet/', CustomerCabinet.as_view(), name='customer_cabinet'),
     path('', include('django.contrib.auth.urls')),
     path('register/', SignUp.as_view(), name='register'),
     path('confirm_email/', ConfirmEmail.as_view(), name='confirm_email'),

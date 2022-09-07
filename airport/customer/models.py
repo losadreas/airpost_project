@@ -9,7 +9,7 @@ class Customer(AbstractUser):
     email = models.EmailField(unique=True)
     token = models.CharField(max_length=124, blank=True)
     balance = models.PositiveIntegerField(default=0)
-    role = models.CharField(max_length=25, choices=ROLES_CHOICES)
+    role = models.CharField(max_length=25, choices=ROLES_CHOICES, default='Customer')
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -35,7 +35,7 @@ class Ticket(models.Model):
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
     passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    price = models.FloatField
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     check_in = models.BooleanField(default=False)
     boarding = models.BooleanField(default=False)
     luggage = models.PositiveIntegerField

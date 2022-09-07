@@ -9,6 +9,8 @@ from airport.settings import DEFAULT_FROM_EMAIL
 from customer.forms import CustomUserCreationForm
 from django.core.mail import EmailMessage
 
+from customer.models import Ticket
+
 Customer = get_user_model()
 
 
@@ -68,4 +70,21 @@ class VerifyEmail(View):
             login(request, customer, backend='django.contrib.auth.backends.ModelBackend')
         else:
             return redirect('check_link')
-        return redirect('home')
+        return redirect('customer_cabinet/' + str(customer.pk))
+
+
+class LogOut(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        template = 'logout.html'
+        return render(request, template)
+
+
+class CustomerCabinet(View):
+    def get(self, request):
+        if request.user.id is None:
+            return redirect('login')
+        template = 'customer_cabinet.html'
+        tickets = Ticket.objects.filter(customer=request.user).all()
+        customer = Customer.objects.get(id=request.user.id)
+        return render(request, template, {'customer': customer, 'tickets': tickets})
