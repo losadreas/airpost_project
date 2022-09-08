@@ -9,7 +9,7 @@
     {% for ticket in tickets %}
     <hr>
     <li>Ticket</li>
-    <li>{{ticket.price}}$</li>
+
      <li>Boarding {{ticket.boarding}}</li>
      <li>{{ticket.seat_type}}</li>
      <hr>
@@ -20,6 +20,7 @@
     <li>Passport {{ticket.passenger.passport}}</li>
          <hr>
     <li>Flight</li>
+    <li>Price {{ticket.flight.price}}</li>
     <li>Destination {{ticket.flight.destination}}</li>
     <li>Date {{ticket.flight.date_time_flight}}</li>
     {% endfor %}

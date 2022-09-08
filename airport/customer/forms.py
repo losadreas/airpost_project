@@ -13,5 +13,5 @@ class CustomUserCreationForm(UserCreationForm):
 class TicketForm(ModelForm):
     class Meta:
         model = Ticket
-        fields = ['seat_type', 'price', 'luggage', 'option']
+        fields = ['seat_type', 'luggage', 'option', 'passenger']
 

@@ -99,28 +99,6 @@ class FlightView(CreateView):
         return render(request, template, {'flights': flights})
 
 
-# class CreateTicket(CreateView):
-#     form_class = FlightForm
-#     template_name = "create_ticket.html"
-#
-#     def post(self, request, *args, **kwargs):
-#         form = CreatePostForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             files = request.FILES.getlist('all_images')
-#             form = form.save(commit=False)
-#             form.user = request.user
-#             form.save()
-#             post_pk = form.pk
-#             for file in files:
-#                 Image.objects.create(images=file, post_id=post_pk)
-#             return redirect('/post')
-#         context = {'form': form}
-#         return render(request, self.template_name, context)
-#
-#     def get(self, request, *args, **kwargs):
-#         if request.user.id is None:
-#             return redirect('login')
-#         return super(CreatePost, self).get(self, request, *args, **kwargs)
 
 
 class BookView(CreateView):
@@ -130,20 +108,21 @@ class BookView(CreateView):
 
     def get(self, request, pk):
         form = TicketForm()
-        #     if request.user.id is None:
-        #         return redirect('login')
-        #
-        #     data = super().get_context_data(*args, **kwargs)
-        #     data['flight'] = Flight.objects.get(pk=kwargs['pk'])
-        #     return data
-        # flight = Flight.objects.get(pk=pk)
-        # template = "book.html"
-        # return super(BookView, self).get(self, request, {'flight': flight})
-        # return render(request, template, {'flight': flight})
-        # initial = super(BookView, self).get_initial()
-        # initial['flight'] = Flight.objects.get(pk=pk)
+
         f = Flight.objects.get(pk=pk)
         return render(request, 'book.html', {'flight': f, 'form': form})
 
-    def post(self):
-        pass
+    def post(self, request, *args, **kwargs):
+        form = TicketForm(request.POST, instance=request.user)
+        if form.is_valid():
+            Ticket.objects.create(seat_type=form.cleaned_data['seat_type'],
+                                  luggage=form.cleaned_data['luggage'],
+                                  option=form.cleaned_data['option'],
+                                  passenger=form.cleaned_data['passenger'],
+                                  customer=request.user,
+                                  flight=Flight.objects.get(pk=kwargs['pk'])
+                                  )
+
+            return redirect('customer_cabinet')
+        context = {'form': form}
+        return render(request, self.template_name, context)

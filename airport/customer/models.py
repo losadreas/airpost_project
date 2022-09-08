@@ -29,6 +29,7 @@ class Flight(models.Model):
     number = models.CharField(max_length=12, default='NM 12')
     destination = models.CharField(max_length=150, blank=True)
     date_time_flight = models.DateTimeField(default=timezone.now)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
 
 class Ticket(models.Model):
@@ -36,7 +37,6 @@ class Ticket(models.Model):
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
     passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
     check_in = models.BooleanField(default=False)
     boarding = models.BooleanField(default=False)
     luggage = models.PositiveIntegerField(default=0)

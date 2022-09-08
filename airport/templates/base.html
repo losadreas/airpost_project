@@ -16,6 +16,7 @@
           {% if user.is_authenticated %}
         <li class="nav-item"><a href="{% url 'customer_cabinet'%}" class="nav-link" aria-current="page">Cabinet</a></li>
         <li class="nav-item"><a href="{%url 'logout'%}" class="nav-link">Logout</a></li>
+         <li class="nav-item"><a href="{%url 'flight'%}" class="nav-link">Flights</a></li>
           {% endif %}
       </ul>
     </header>
