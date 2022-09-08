@@ -26,6 +26,7 @@ class Passenger(models.Model):
 
 
 class Flight(models.Model):
+    number = models.CharField(max_length=12, default='NM 12')
     destination = models.CharField(max_length=150, blank=True)
     date_time_flight = models.DateTimeField(default=timezone.now)
 
@@ -38,8 +39,8 @@ class Ticket(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     check_in = models.BooleanField(default=False)
     boarding = models.BooleanField(default=False)
-    luggage = models.PositiveIntegerField
-    option = models.PositiveIntegerField
+    luggage = models.PositiveIntegerField(default=0)
+    option = models.PositiveIntegerField(default=0)
     seat_type = models.CharField(max_length=24, choices=SEAT_CHOICES)
 
 

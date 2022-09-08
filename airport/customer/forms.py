@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from customer.models import Customer, Flight
+from customer.models import Customer, Ticket
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -10,8 +10,8 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ['username', 'email']
 
 
-class FlightForm(ModelForm):
+class TicketForm(ModelForm):
     class Meta:
-        model = Flight
-        fields = ['destination', 'date_time_flight']
+        model = Ticket
+        fields = ['seat_type', 'price', 'luggage', 'option']
 

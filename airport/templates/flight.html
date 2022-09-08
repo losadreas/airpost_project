@@ -1,0 +1,12 @@
+{% extends 'base.html'%}
+{% block content %}
+    <li><a href="{%url 'home'%}">Home</a></li>
+<hr>
+    {% for flight in flights %}
+    <li>{{flight.number}}</li>
+    <li>{{flight.destination}}</li>
+     <li>{{flight.date_time_flight}}</li>
+ <p class="link-read-post"><a href="{% url 'book' flight.pk %}">Book</a> </p></li>
+    {% endfor %}
+        </p>
+{% endblock %}

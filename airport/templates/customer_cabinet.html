@@ -12,6 +12,16 @@
     <li>{{ticket.price}}$</li>
      <li>Boarding {{ticket.boarding}}</li>
      <li>{{ticket.seat_type}}</li>
+     <hr>
+    <li>Passenger</li>
+    <li>First name {{ticket.passenger.first_name}}</li>
+    <li>Last name {{ticket.passenger.last_name}}</li>
+    <li>Sex {{ticket.passenger.sex}}</li>
+    <li>Passport {{ticket.passenger.passport}}</li>
+         <hr>
+    <li>Flight</li>
+    <li>Destination {{ticket.flight.destination}}</li>
+    <li>Date {{ticket.flight.date_time_flight}}</li>
     {% endfor %}
 
 </ul>

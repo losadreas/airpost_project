@@ -1,0 +1,17 @@
+{% extends 'base.html'%}
+{% block content %}
+
+    <li>
+        <h2>{{customer.username}}</h2>
+    <li>Balance - {{customer.balance}}$</li>
+    <hr>
+    <li>Flight</li>
+    <li>Number {{flight.number}}</li>
+    <li>Destination {{flight.destination}}</li>
+    <li>Date {{flight.date_time_flight}}</li>
+<form action="" method="post">
+    {{form.as_p}}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">submit</button>
+
+{% endblock %}
