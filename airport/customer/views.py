@@ -6,16 +6,15 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from django.views.generic import CreateView
 from airport.settings import DEFAULT_FROM_EMAIL
-from customer.forms import CustomUserCreationForm, TicketForm
+from customer.forms import *
 from django.core.mail import EmailMessage
-
 from customer.models import Ticket, Passenger, Flight
 
 Customer = get_user_model()
 
 
 class HomeView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         template = "home.html"
         return render(request, template)
 
@@ -70,11 +69,11 @@ class VerifyEmail(View):
             login(request, customer, backend='django.contrib.auth.backends.ModelBackend')
         else:
             return redirect('check_link')
-        return redirect('customer_cabinet/' + str(customer.pk))
+        return redirect('customer_cabinet')
 
 
 class LogOut(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         logout(request)
         template = 'logout.html'
         return render(request, template)
@@ -99,18 +98,16 @@ class FlightView(CreateView):
         return render(request, template, {'flights': flights})
 
 
-
-
-class BookView(CreateView):
+class BookTicketView(CreateView):
     model = Ticket
     form_class = TicketForm
-    template_name = "book.html"
+    template_name = "book_ticket.html"
 
-    def get(self, request, pk):
+    def get(self, request, pk_flight, pk_passenger):
         form = TicketForm()
-
-        f = Flight.objects.get(pk=pk)
-        return render(request, 'book.html', {'flight': f, 'form': form})
+        passenger = Passenger.objects.get(pk=pk_passenger)
+        flight = Flight.objects.get(pk=pk_flight)
+        return render(request, 'book_ticket.html', {'flight': flight, 'form': form, 'passenger': passenger})
 
     def post(self, request, *args, **kwargs):
         form = TicketForm(request.POST, instance=request.user)
@@ -118,11 +115,32 @@ class BookView(CreateView):
             Ticket.objects.create(seat_type=form.cleaned_data['seat_type'],
                                   luggage=form.cleaned_data['luggage'],
                                   option=form.cleaned_data['option'],
-                                  passenger=form.cleaned_data['passenger'],
+                                  passenger=Passenger.objects.get(pk=kwargs['pk_passenger']),
                                   customer=request.user,
-                                  flight=Flight.objects.get(pk=kwargs['pk'])
+                                  flight=Flight.objects.get(pk=kwargs['pk_flight'])
                                   )
-
             return redirect('customer_cabinet')
+        context = {'form': form}
+        return render(request, self.template_name, context)
+
+
+class BookPassengerView(CreateView):
+    model = Passenger
+    form_class = PassengerForm
+    template_name = "book_passenger.html"
+
+    def get(self, request, pk):
+        form = PassengerForm()
+        flight = Flight.objects.get(pk=pk)
+        return render(request, 'book_passenger.html', {'flight': flight, 'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = PassengerForm(request.POST, instance=request.user)
+        if form.is_valid():
+            passenger = Passenger.objects.create(first_name=form.cleaned_data['first_name'],
+                                                 last_name=form.cleaned_data['last_name'],
+                                                 passport=form.cleaned_data['passport'],
+                                                 sex=form.cleaned_data['sex'])
+            return redirect('book_ticket', pk_passenger=passenger.pk, pk_flight=kwargs['pk'])
         context = {'form': form}
         return render(request, self.template_name, context)

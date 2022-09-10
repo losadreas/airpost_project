@@ -23,6 +23,7 @@ class Passenger(models.Model):
     last_name = models.CharField(max_length=48, blank=True)
     sex = models.CharField(max_length=12, choices=SEX_CHOICES)
     passport = models.CharField(max_length=16, blank=True)
+    # customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
 
 class Flight(models.Model):
