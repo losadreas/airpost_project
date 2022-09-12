@@ -11,6 +11,8 @@ from django.core.mail import EmailMessage
 from customer.models import Ticket, Passenger, Flight
 from django.forms import formset_factory
 
+from customer.utils import create_bill
+
 Customer = get_user_model()
 
 
@@ -21,20 +23,19 @@ class HomeView(View):
 
 
 class ConfirmEmail(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         template = "confirm_email.html"
         return render(request, template)
 
 
 class CheckLink(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         template = "check_link.html"
         return render(request, template)
 
 
 class SignUp(CreateView):
     form_class = CustomUserCreationForm
-    # success_url = reverse_lazy("confirm_email")
     template_name = "register.html"
 
     def post(self, request, *args, **kwargs):
@@ -96,9 +97,6 @@ class FlightView(CreateView):
             return redirect('login')
         flights = Flight.objects.all()
         template = "flight.html"
-        #request.session.modified = True
-        #request.session['losandreas'] = '37'
-        # print(request.session.get('losandreas'))
         return render(request, template, {'flights': flights})
 
 
@@ -126,17 +124,14 @@ class BookTicketView(CreateView):
                                       customer=request.user,
                                       flight=flight
                                       )
+            create_bill(flight.price, request.session.get('quantity_passenger'), request.user.email)
+            request.user.balance -= flight.price*request.session.get('quantity_passenger')
             return redirect('customer_cabinet')
         context = {'form': form}
         return render(request, self.template_name, context)
 
 
 class BookPassengerView(CreateView):
-    # PassengerFormSet = formset_factory(PassengerForm, extra=quantity_passengers())
-    # model = Passenger
-    # form_class = PassengerForm
-    # template_name = "book_passenger.html"
-
     def get(self, request):
         PassengerFormSet = formset_factory(PassengerForm, extra=request.session.get('quantity_passenger'))
         form = PassengerFormSet

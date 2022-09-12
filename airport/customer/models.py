@@ -8,7 +8,7 @@ class Customer(AbstractUser):
                      ('Supervisor', 'Supervisor'), ('Customer', 'Customer'))
     email = models.EmailField(unique=True)
     token = models.CharField(max_length=124, blank=True)
-    balance = models.PositiveIntegerField(default=0)
+    balance = models.DecimalField(max_digits=10, decimal_places=2)
     role = models.CharField(max_length=25, choices=ROLES_CHOICES, default='Customer')
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -19,15 +19,18 @@ class Customer(AbstractUser):
 
 class Passenger(models.Model):
     SEX_CHOICES = (('Male', 'Male'), ('Female', 'Female'))
+    AGE_CHOICES = (('Adult', 'Adult'), ('Infant', 'Infant'), ('Kid', 'Kid'))
     first_name = models.CharField(max_length=48, blank=True)
     last_name = models.CharField(max_length=48, blank=True)
     sex = models.CharField(max_length=12, choices=SEX_CHOICES)
+    age = models.CharField(max_length=12, choices=AGE_CHOICES, default='Adult')
     passport = models.CharField(max_length=16, blank=True)
     # customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
 
 class Flight(models.Model):
     number = models.CharField(max_length=12, default='NM 12')
+    departure = models.CharField(max_length=150, blank=True)
     destination = models.CharField(max_length=150, blank=True)
     date_time_flight = models.DateTimeField(default=timezone.now)
     price = models.DecimalField(max_digits=10, decimal_places=2)

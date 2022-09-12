@@ -7,16 +7,14 @@
     {% for ticket in tickets %}
     <hr>
     <li>Ticket</li>
-     <li>Boarding {{ticket.boarding}}</li>
      <li>{{ticket.seat_type}}</li>
     <h4>Passenger :</h4>
-    <li>First name {{ticket.passenger.first_name}}</li>
-    <li>Last name {{ticket.passenger.last_name}}</li>
-    <li>Sex {{ticket.passenger.sex}}</li>
-    <li>Passport {{ticket.passenger.passport}}</li>
+    <li>First name: {{ticket.passenger.first_name}}, Last name: {{ticket.passenger.last_name}} </li>
+    <li>Sex: {{ticket.passenger.sex}}, Age: {{ticket.passenger.age}}</li>
+    <li>Passport: {{ticket.passenger.passport}}</li>
     <h4>Flight :</h4>
     <li>Number {{ticket.flight.number}}</li>
-    <li>Destination {{ticket.flight.destination}}</li>
+    <li>{{ticket.flight.departure}} - {{ticket.flight.destination}}</li>
     <li>Date {{ticket.flight.date_time_flight}}</li>
     {% endfor %}
 
