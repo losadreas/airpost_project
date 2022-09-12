@@ -6,16 +6,19 @@
 
     {% for ticket in tickets %}
     <hr>
-    <li>Ticket</li>
-     <li>{{ticket.seat_type}}</li>
+          <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+        </div>
+        <h3 class="fs-2">Ticket </h3> {{ticket.seat_type}} class
+        <p>
     <h4>Passenger :</h4>
     <li>First name: {{ticket.passenger.first_name}}, Last name: {{ticket.passenger.last_name}} </li>
-    <li>Sex: {{ticket.passenger.sex}}, Age: {{ticket.passenger.age}}</li>
+    <li>Sex: {{ticket.passenger.sex}},   Age: {{ticket.passenger.age}}</li>
     <li>Passport: {{ticket.passenger.passport}}</li>
     <h4>Flight :</h4>
-    <li>Number {{ticket.flight.number}}</li>
+    <li>Number flight: {{ticket.flight.number}}</li>
     <li>{{ticket.flight.departure}} - {{ticket.flight.destination}}</li>
     <li>Date {{ticket.flight.date_time_flight}}</li>
+    </p>
     {% endfor %}
 
 </ul>

@@ -71,8 +71,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'airport.wsgi.application'
-
-
+USE_L10N = False
+DATETIME_FORMAT = 'm-F H:i'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
