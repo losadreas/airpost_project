@@ -11,7 +11,9 @@
     <li>Date {{flight.date_time_flight}}</li>
     <li>Price {{flight.price}}$</li>
 <form action="" method="post">
+
     {{form.as_p}}
+
     {% csrf_token %}
     <button type="submit" class="btn btn-success">submit</button>
 

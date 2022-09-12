@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
-
+from django import forms
 from customer.models import *
 
 
@@ -17,9 +17,15 @@ class TicketForm(ModelForm):
 
 
 class PassengerForm(ModelForm):
-
     class Meta:
         model = Passenger
         fields = '__all__'
 
 
+class QuantityPassengerForm(forms.Form):
+    quantity_passenger = forms.IntegerField(label='Quantity Passengers')
+    #
+    # class Meta:
+    #     fields = ['quantity_passenger']
+
+# class PassengerFormSet

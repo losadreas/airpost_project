@@ -9,6 +9,7 @@ from airport.settings import DEFAULT_FROM_EMAIL
 from customer.forms import *
 from django.core.mail import EmailMessage
 from customer.models import Ticket, Passenger, Flight
+from django.forms import formset_factory
 
 Customer = get_user_model()
 
@@ -95,6 +96,9 @@ class FlightView(CreateView):
             return redirect('login')
         flights = Flight.objects.all()
         template = "flight.html"
+        #request.session.modified = True
+        #request.session['losandreas'] = '37'
+        # print(request.session.get('losandreas'))
         return render(request, template, {'flights': flights})
 
 
@@ -103,44 +107,72 @@ class BookTicketView(CreateView):
     form_class = TicketForm
     template_name = "book_ticket.html"
 
-    def get(self, request, pk_flight, pk_passenger):
+    def get(self, request):
         form = TicketForm()
-        passenger = Passenger.objects.get(pk=pk_passenger)
-        flight = Flight.objects.get(pk=pk_flight)
-        return render(request, 'book_ticket.html', {'flight': flight, 'form': form, 'passenger': passenger})
+        passengers = Passenger.objects.filter(pk__in=request.session.get('booked_passengers')).all()
+        flight = Flight.objects.get(pk=request.session.get('flight_pk'))
+        return render(request, 'book_ticket.html', {'flight': flight, 'form': form, 'passengers': passengers})
 
     def post(self, request, *args, **kwargs):
         form = TicketForm(request.POST, instance=request.user)
+        passengers = Passenger.objects.filter(pk__in=request.session.get('booked_passengers')).all()
+        flight = Flight.objects.get(pk=request.session.get('flight_pk'))
         if form.is_valid():
-            Ticket.objects.create(seat_type=form.cleaned_data['seat_type'],
-                                  luggage=form.cleaned_data['luggage'],
-                                  option=form.cleaned_data['option'],
-                                  passenger=Passenger.objects.get(pk=kwargs['pk_passenger']),
-                                  customer=request.user,
-                                  flight=Flight.objects.get(pk=kwargs['pk_flight'])
-                                  )
+            for passenger in passengers:
+                Ticket.objects.create(seat_type=form.cleaned_data['seat_type'],
+                                      luggage=form.cleaned_data['luggage'],
+                                      option=form.cleaned_data['option'],
+                                      passenger=passenger,
+                                      customer=request.user,
+                                      flight=flight
+                                      )
             return redirect('customer_cabinet')
         context = {'form': form}
         return render(request, self.template_name, context)
 
 
 class BookPassengerView(CreateView):
-    model = Passenger
-    form_class = PassengerForm
-    template_name = "book_passenger.html"
+    # PassengerFormSet = formset_factory(PassengerForm, extra=quantity_passengers())
+    # model = Passenger
+    # form_class = PassengerForm
+    # template_name = "book_passenger.html"
 
-    def get(self, request, pk):
-        form = PassengerForm()
-        flight = Flight.objects.get(pk=pk)
+    def get(self, request):
+        PassengerFormSet = formset_factory(PassengerForm, extra=request.session.get('quantity_passenger'))
+        form = PassengerFormSet
+        flight = Flight.objects.get(pk=request.session.get('flight_pk'))
         return render(request, 'book_passenger.html', {'flight': flight, 'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = PassengerForm(request.POST, instance=request.user)
+        request.session['booked_passengers'] = []
+        PassengerFormSet = formset_factory(PassengerForm, extra=request.session.get('quantity_passenger'))
+        formset = PassengerFormSet(request.POST)
+        for form in formset:
+            if form.is_valid():
+                passenger = Passenger.objects.create(first_name=form.cleaned_data['first_name'],
+                                                     last_name=form.cleaned_data['last_name'],
+                                                     passport=form.cleaned_data['passport'],
+                                                     sex=form.cleaned_data['sex'])
+                request.session['booked_passengers'].append(passenger.pk)
+        return redirect('book_ticket')
+        context = {'form': formset}
+        return render(request, self.template_name, context)
+
+
+class BookView(CreateView):
+    form_class = QuantityPassengerForm
+    template_name = "book.html"
+
+    def get(self, request, pk_flight):
+        form = QuantityPassengerForm
+        flight = Flight.objects.get(pk=pk_flight)
+        request.session['flight_pk'] = pk_flight
+        return render(request, 'book.html', {'flight': flight, 'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = QuantityPassengerForm(request.POST)
         if form.is_valid():
-            passenger = Passenger.objects.create(first_name=form.cleaned_data['first_name'],
-                                                 last_name=form.cleaned_data['last_name'],
-                                                 passport=form.cleaned_data['passport'],
-                                                 sex=form.cleaned_data['sex'])
-            return redirect('book_ticket', pk_passenger=passenger.pk, pk_flight=kwargs['pk'])
+            request.session['quantity_passenger'] = form.cleaned_data['quantity_passenger']
+            return redirect('book_passenger')
         context = {'form': form}
         return render(request, self.template_name, context)

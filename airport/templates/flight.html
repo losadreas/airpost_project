@@ -7,7 +7,7 @@
     <li>{{flight.destination}}</li>
      <li>{{flight.date_time_flight}}</li>
     <li>{{flight.price}}$</li>
- <p class="link-read-post"><a href="{% url 'book_passenger' flight.pk %}">Book</a> </p>
+ <p class="link-read-post"><a href="{% url 'book' flight.pk %}">Book</a> </p>
     {% endfor %}
         </p>
 {% endblock %}

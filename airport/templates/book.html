@@ -10,13 +10,7 @@
     <li>Destination {{flight.destination}}</li>
     <li>Date {{flight.date_time_flight}}</li>
     <li>Price {{flight.price}}$</li>
-    <li>Passenger(s)</li>
-    {% for passenger in passengers %}
-    <li>First name {{passenger.first_name}}</li>
-    <li>Last name {{passenger.last_name}}</li>
-    <li>Sex {{passenger.sex}}</li>
-    <li>Passport {{passenger.passport}}</li>
-    {% endfor %}
+
 <form action="" method="post">
     {{form.as_p}}
     {% csrf_token %}
