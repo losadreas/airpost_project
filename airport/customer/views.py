@@ -11,7 +11,7 @@ from django.core.mail import EmailMessage
 from customer.models import Ticket, Passenger, Flight
 from django.forms import formset_factory
 
-from customer.utils import create_bill
+from customer.utils import create_bill_ticket
 
 Customer = get_user_model()
 
@@ -124,7 +124,7 @@ class BookTicketView(CreateView):
                                       customer=request.user,
                                       flight=flight
                                       )
-            create_bill(flight.price, request.session.get('quantity_passenger'), request.user.email)
+            create_bill_ticket(passengers, request.user.email, flight)
             request.user.balance -= flight.price*request.session.get('quantity_passenger')
             return redirect('customer_cabinet')
         context = {'form': form}
