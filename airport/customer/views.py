@@ -11,7 +11,7 @@ from django.core.mail import EmailMessage
 from customer.models import Ticket, Passenger, Flight
 from django.forms import formset_factory
 
-from customer.utils import create_bill_ticket
+from customer.utils import create_bill_ticket, calculate_age
 
 Customer = get_user_model()
 
@@ -117,15 +117,16 @@ class BookTicketView(CreateView):
         flight = Flight.objects.get(pk=request.session.get('flight_pk'))
         if form.is_valid():
             for passenger in passengers:
+                age_type = calculate_age(passenger, flight)
                 Ticket.objects.create(seat_type=form.cleaned_data['seat_type'],
                                       luggage=form.cleaned_data['luggage'],
                                       option=form.cleaned_data['option'],
                                       passenger=passenger,
                                       customer=request.user,
-                                      flight=flight
+                                      flight=flight,
+                                      age_type=age_type
                                       )
             create_bill_ticket(passengers, request.user.email, flight)
-            request.user.balance -= flight.price*request.session.get('quantity_passenger')
             return redirect('customer_cabinet')
         context = {'form': form}
         return render(request, self.template_name, context)
@@ -147,7 +148,8 @@ class BookPassengerView(CreateView):
                 passenger = Passenger.objects.create(first_name=form.cleaned_data['first_name'],
                                                      last_name=form.cleaned_data['last_name'],
                                                      passport=form.cleaned_data['passport'],
-                                                     sex=form.cleaned_data['sex'])
+                                                     sex=form.cleaned_data['sex'],
+                                                     date_birth=form.cleaned_data['date_birth'])
                 request.session['booked_passengers'].append(passenger.pk)
         return redirect('book_ticket')
         context = {'form': formset}

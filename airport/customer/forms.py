@@ -17,6 +17,7 @@ class TicketForm(ModelForm):
 
 
 class PassengerForm(ModelForm):
+
     class Meta:
         model = Passenger
         fields = '__all__'
@@ -24,8 +25,3 @@ class PassengerForm(ModelForm):
 
 class QuantityPassengerForm(forms.Form):
     quantity_passenger = forms.IntegerField(label='Quantity Passengers')
-    #
-    # class Meta:
-    #     fields = ['quantity_passenger']
-
-# class PassengerFormSet

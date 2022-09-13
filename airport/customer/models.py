@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+from datetime import date
 
 
 class Customer(AbstractUser):
@@ -19,13 +20,11 @@ class Customer(AbstractUser):
 
 class Passenger(models.Model):
     SEX_CHOICES = (('Male', 'Male'), ('Female', 'Female'))
-    AGE_CHOICES = (('Adult', 'Adult'), ('Infant', 'Infant'), ('Kid', 'Kid'))
     first_name = models.CharField(max_length=48, blank=True)
     last_name = models.CharField(max_length=48, blank=True)
     sex = models.CharField(max_length=12, choices=SEX_CHOICES)
-    age = models.CharField(max_length=12, choices=AGE_CHOICES, default='Adult')
+    date_birth = models.DateField(default=date.today)
     passport = models.CharField(max_length=16, blank=True)
-    # customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
 
 class Flight(models.Model):
@@ -37,6 +36,7 @@ class Flight(models.Model):
 
 
 class Ticket(models.Model):
+    AGE_CHOICES = (('Adult', 'Adult'), ('Infant', 'Infant'), ('Kid', 'Kid'))
     SEAT_CHOICES = (('economy', 'economy'), ('business', 'business'))
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
     passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
@@ -46,5 +46,5 @@ class Ticket(models.Model):
     luggage = models.PositiveIntegerField(default=0)
     option = models.PositiveIntegerField(default=0)
     seat_type = models.CharField(max_length=24, choices=SEAT_CHOICES)
-
+    age_type = models.CharField(max_length=12, choices=AGE_CHOICES, default='Adult')
 
