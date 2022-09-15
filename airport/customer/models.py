@@ -9,7 +9,6 @@ class Customer(AbstractUser):
                      ('Supervisor', 'Supervisor'), ('Customer', 'Customer'))
     email = models.EmailField(unique=True)
     token = models.CharField(max_length=124, blank=True)
-    balance = models.DecimalField(max_digits=10, decimal_places=2)
     role = models.CharField(max_length=25, choices=ROLES_CHOICES, default='Customer')
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

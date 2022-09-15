@@ -11,5 +11,5 @@ urlpatterns = [
     path('book/<int:pk_flight>/', BookView.as_view(), name='book'),
     path('book_passenger/', BookPassengerView.as_view(), name='book_passenger'),
     path('book_ticket/', BookTicketView.as_view(), name='book_ticket'),
-    path('staff/', include('staff.urls'))
+    # path('staff/', include('staff.urls'))
 ]

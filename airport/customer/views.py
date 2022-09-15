@@ -1,17 +1,13 @@
 from django.contrib.auth import get_user_model, logout, login
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.shortcuts import render, redirect
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.views.generic import CreateView
-from airport.settings import DEFAULT_FROM_EMAIL
 from customer.forms import *
-from django.core.mail import EmailMessage
 from customer.models import Ticket, Passenger, Flight
 from django.forms import formset_factory
-
-from customer.utils import create_bill_ticket, calculate_age
+from customer.utils import create_bill_ticket, calculate_age, send_email_verify
 
 Customer = get_user_model()
 
@@ -47,9 +43,7 @@ class SignUp(CreateView):
             customer.token = account_activation_token.make_token(customer)
             customer.is_active = False
             customer.save()
-            message = f'Verify email Follow the link {request._current_scheme_host}/customers/verify_email/{customer.token}/{str(urlsafe_base64_encode(force_bytes(customer.pk)))}/'
-            email = EmailMessage('Verify email', message, from_email=DEFAULT_FROM_EMAIL, to=[customer.email])
-            email.send()
+            send_email_verify(request._current_scheme_host, customer.token, customer.pk, customer.email)
             return redirect('confirm_email')
         context = {'form': form}
         return render(request, self.template_name, context)
