@@ -2,12 +2,10 @@
 {% block content %}
 
 <ul>
-    <h4>Balance - {{customer.balance}}$</h4>
 
     {% for ticket in tickets %}
     <hr>
           <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
-        </div>
         <h3 class="fs-2">Ticket </h3> {{ticket.seat_type}} class
         <p>
     <h4>Passenger :</h4>

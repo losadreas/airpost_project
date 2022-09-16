@@ -18,6 +18,7 @@ def create_bill_ticket(passengers, email_customer, flight):
     message = f'Your bill - {bill}$ \n passenger(s) - {passengers_info} \n {flight_info}'
     email = EmailMessage('Bill airport', message, from_email=DEFAULT_FROM_EMAIL, to=[email_customer])
     email.send()
+    return message
 
 
 def calculate_age(passenger, flight):

@@ -120,23 +120,23 @@ class BookTicketView(CreateView):
                                       flight=flight,
                                       age_type=age_type
                                       )
-            create_bill_ticket(passengers, request.user.email, flight)
-            return redirect('customer_cabinet')
+            request.session['report'] = create_bill_ticket(passengers, request.user.email, flight)
+            return redirect('report')
         context = {'form': form}
         return render(request, self.template_name, context)
 
 
 class BookPassengerView(CreateView):
     def get(self, request):
-        PassengerFormSet = formset_factory(PassengerForm, extra=request.session.get('quantity_passenger'))
-        form = PassengerFormSet
+        passenger_form_set = formset_factory(PassengerForm, extra=request.session.get('quantity_passenger'))
+        form = passenger_form_set
         flight = Flight.objects.get(pk=request.session.get('flight_pk'))
         return render(request, 'book_passenger.html', {'flight': flight, 'form': form})
 
     def post(self, request, *args, **kwargs):
         request.session['booked_passengers'] = []
-        PassengerFormSet = formset_factory(PassengerForm, extra=request.session.get('quantity_passenger'))
-        formset = PassengerFormSet(request.POST)
+        passenger_form_set = formset_factory(PassengerForm, extra=request.session.get('quantity_passenger'))
+        formset = passenger_form_set(request.POST)
         for form in formset:
             if form.is_valid():
                 passenger = Passenger.objects.create(first_name=form.cleaned_data['first_name'],
@@ -145,9 +145,12 @@ class BookPassengerView(CreateView):
                                                      sex=form.cleaned_data['sex'],
                                                      date_birth=form.cleaned_data['date_birth'])
                 request.session['booked_passengers'].append(passenger.pk)
+            else:
+                flight = Flight.objects.get(pk=request.session.get('flight_pk'))
+                context = {'form': formset}
+                return render(request, 'book_passenger.html', {'flight': flight, 'form': formset})
         return redirect('book_ticket')
-        context = {'form': formset}
-        return render(request, self.template_name, context)
+
 
 
 class BookView(CreateView):
@@ -167,3 +170,10 @@ class BookView(CreateView):
             return redirect('book_passenger')
         context = {'form': form}
         return render(request, self.template_name, context)
+
+
+class ReportView(View):
+    def get(self, request):
+        report = request.session.get('report')
+        template = 'report.html'
+        return render(request, template, {'report': report})

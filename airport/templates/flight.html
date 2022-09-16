@@ -3,6 +3,8 @@
     <li><a href="{%url 'home'%}">Home</a></li>
 <hr>
     {% for flight in flights %}
+ <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+<p>
     <li>{{flight.number}}</li>
     <li>{{flight.departure}} - {{flight.destination}}</li>
      <li>{{flight.date_time_flight}}</li>

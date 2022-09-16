@@ -1,0 +1,15 @@
+{% extends 'base.html'%}
+{% block content %}
+         <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+        </div>
+        <h4 class="fs-2">Your ticket(s) </h4>
+        <p>
+       <pre>
+   {{report}}
+</pre>
+    </p>
+
+<li><a href="{%url 'customer_cabinet'%}">Cabinet</a></li>
+
+
+{% endblock %}
