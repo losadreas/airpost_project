@@ -19,17 +19,17 @@ class Customer(AbstractUser):
 
 class Passenger(models.Model):
     SEX_CHOICES = (('Male', 'Male'), ('Female', 'Female'))
-    first_name = models.CharField(max_length=48, blank=True)
-    last_name = models.CharField(max_length=48, blank=True)
+    first_name = models.CharField(max_length=48)
+    last_name = models.CharField(max_length=48)
     sex = models.CharField(max_length=12, choices=SEX_CHOICES)
-    date_birth = models.DateField(default=date.today)
+    date_birth = models.DateField()
     passport = models.CharField(max_length=16, blank=True)
 
 
 class Flight(models.Model):
     number = models.CharField(max_length=12, default='NM 12')
-    departure = models.CharField(max_length=150, blank=True)
-    destination = models.CharField(max_length=150, blank=True)
+    departure = models.CharField(max_length=150)
+    destination = models.CharField(max_length=150)
     date_time_flight = models.DateTimeField(default=timezone.now)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 

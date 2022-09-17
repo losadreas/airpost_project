@@ -20,13 +20,11 @@ class PassengerForm(ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        birth_date = self.cleaned_data['date_birth']
-        now_date = date.today()
-        print(birth_date, now_date)
-        if birth_date > now_date:
-            print('raise')
-            raise forms.ValidationError("Please, check the date of birth")
-        # return super(PassengerForm, self).clean()
+        birth_date = cleaned_data.get('date_birth')
+        if birth_date:
+            now_date = date.today()
+            if birth_date > now_date:
+                raise forms.ValidationError("Please, check the date of birth")
 
     class Meta:
         model = Passenger
