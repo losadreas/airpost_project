@@ -25,18 +25,8 @@ class PassengerForm(ModelForm):
         print(birth_date, now_date)
         if birth_date > now_date:
             print('raise')
-            raise forms.ValidationError("End date must be later than start date")
+            raise forms.ValidationError("Please, check the date of birth")
         # return super(PassengerForm, self).clean()
-
-    # def clean_birth_date(self):
-    #     data = self.cleaned_data['date_birth']
-    #     now_date = date.today()
-    #     if data > now_date:
-    #         raise ValidationError("You have forgotten about Fred!")
-    #
-    #     # Always return a value to use as the new cleaned data, even if
-    #     # this method didn't change it.
-    #     return data
 
     class Meta:
         model = Passenger

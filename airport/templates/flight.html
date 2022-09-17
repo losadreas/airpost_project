@@ -8,7 +8,7 @@
     <li>{{flight.number}}</li>
     <li>{{flight.departure}} - {{flight.destination}}</li>
      <li>{{flight.date_time_flight}}</li>
-    <li>{{flight.price}}$</li>
+    <li>Base price - {{flight.price}}$</li>
  <p class="link-read-post"><a href="{% url 'book' flight.pk %}">Book</a> </p>
     {% endfor %}
         </p>
