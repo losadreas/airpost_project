@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 from django import forms
@@ -17,7 +19,6 @@ class TicketForm(ModelForm):
 
 
 class PassengerForm(ModelForm):
-
     def clean(self):
         cleaned_data = super().clean()
         birth_date = cleaned_data.get('date_birth')
@@ -33,3 +34,5 @@ class PassengerForm(ModelForm):
 
 class QuantityPassengerForm(forms.Form):
     quantity_passenger = forms.IntegerField(label='Quantity Passengers', min_value=1, max_value=24)
+
+

@@ -127,30 +127,27 @@ class BookTicketView(CreateView):
 
 
 class BookPassengerView(CreateView):
+
     def get(self, request):
+        form = PassengerForm()
         passenger_form_set = formset_factory(PassengerForm, extra=request.session.get('quantity_passenger'))
-        form = passenger_form_set
+        formset = passenger_form_set
         flight = Flight.objects.get(pk=request.session.get('flight_pk'))
-        return render(request, 'book_passenger.html', {'flight': flight, 'form': form})
+        return render(request, 'book_passenger.html', {'flight': flight, 'form': formset})
 
     def post(self, request, *args, **kwargs):
         request.session['booked_passengers'] = []
         passenger_form_set = formset_factory(PassengerForm, extra=request.session.get('quantity_passenger'))
         formset = passenger_form_set(request.POST)
         for form in formset:
+            form.empty_permitted = False
             if form.is_valid():
-                passenger = Passenger.objects.create(first_name=form.cleaned_data['first_name'],
-                                                     last_name=form.cleaned_data['last_name'],
-                                                     passport=form.cleaned_data['passport'],
-                                                     sex=form.cleaned_data['sex'],
-                                                     date_birth=form.cleaned_data['date_birth'])
+                passenger = Passenger.objects.create(**form.cleaned_data)
                 request.session['booked_passengers'].append(passenger.pk)
             else:
                 flight = Flight.objects.get(pk=request.session.get('flight_pk'))
-                context = {'form': formset}
                 return render(request, 'book_passenger.html', {'flight': flight, 'form': formset})
         return redirect('book_ticket')
-
 
 
 class BookView(CreateView):
