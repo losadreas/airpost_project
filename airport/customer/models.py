@@ -42,7 +42,6 @@ class Ticket(models.Model):
     check_in = models.BooleanField(default=False)
     boarding = models.BooleanField(default=False)
     luggage = models.PositiveIntegerField(default=0)
-    option = models.PositiveIntegerField(default=0)
     seat_type = models.CharField(max_length=24, choices=SEAT_CHOICES)
     age_type = models.CharField(max_length=12, choices=AGE_CHOICES, default='Adult')
 

@@ -1,5 +1,4 @@
 from datetime import date
-
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 from django import forms
@@ -15,17 +14,16 @@ class CustomUserCreationForm(UserCreationForm):
 class TicketForm(ModelForm):
     class Meta:
         model = Ticket
-        fields = ['seat_type', 'luggage', 'option']
+        fields = ['seat_type', 'luggage']
 
 
 class PassengerForm(ModelForm):
-    def clean(self):
-        cleaned_data = super().clean()
-        birth_date = cleaned_data.get('date_birth')
-        if birth_date:
-            now_date = date.today()
-            if birth_date > now_date:
-                raise forms.ValidationError("Please, check the date of birth")
+    def clean_date_birth(self):
+        birth_date = self.cleaned_data['date_birth']
+        now_date = date.today()
+        if birth_date > now_date:
+            raise forms.ValidationError("Please, check the date of birth")
+        return birth_date
 
     class Meta:
         model = Passenger

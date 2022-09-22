@@ -11,11 +11,13 @@ def create_bill_ticket(passengers, email_customer, flight):
     passengers_info = ''
     flight_info = f'Flight- {flight.number}, {flight.departure}- {flight.destination}, ' \
                   f'{flight.date_time_flight:%Y-%m-%d %H:%M}'
-    AGE_RATE = {'Adult': 1.0, 'Kid': 0.7, 'Infant': 0.3}
+    AGE_RATE = {'Adult': 1.0, 'Kid': 0.7, 'Infant': 0.3, 'luggage': 0.1}
     for passenger in passengers:
         ticket = Ticket.objects.get(passenger=passenger)
         bill += float(flight.price) * AGE_RATE[ticket.age_type]
-        passengers_info += f'{passenger.first_name} {passenger.last_name}\n {passenger.passport}, {ticket.age_type},{passenger.sex}\n '
+        bill += float(flight.price) * ticket.luggage * AGE_RATE['luggage']
+        passengers_info += f'{passenger.first_name} {passenger.last_name}\n {passenger.passport},' \
+                           f' {ticket.age_type}, {passenger.sex}, {ticket.luggage}\n '
     message = f'Your bill - {round(bill,2)}$ \n passenger(s) - {passengers_info} \n {flight_info}'
     email = EmailMessage('Bill airport', message, from_email=DEFAULT_FROM_EMAIL, to=[email_customer])
     email.send()

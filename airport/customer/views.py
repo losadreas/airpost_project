@@ -114,7 +114,6 @@ class BookTicketView(CreateView):
                 age_type = calculate_age(passenger, flight)
                 Ticket.objects.create(seat_type=form.cleaned_data['seat_type'],
                                       luggage=form.cleaned_data['luggage'],
-                                      option=form.cleaned_data['option'],
                                       passenger=passenger,
                                       customer=request.user,
                                       flight=flight,
